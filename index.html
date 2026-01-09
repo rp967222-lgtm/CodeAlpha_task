@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Student Grade Tracker</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+    <h1>📊 Student Grade Tracker</h1>
+
+    <div class="input-box">
+        <input type="text" id="name" placeholder="Student Name">
+        <input type="number" id="grade" placeholder="Grade (0-100)">
+        <button onclick="addStudent()">Add</button>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Grade</th>
+            </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+    </table>
+
+    <div class="summary">
+        <p>Average: <span id="avg">0</span></p>
+        <p>Highest: <span id="high">0</span></p>
+        <p>Lowest: <span id="low">0</span></p>
+    </div>
+</div>
+
+<script>
+    let grades = [];
+
+    function addStudent() {
+        const name = document.getElementById("name").value.trim();
+        const grade = Number(document.getElementById("grade").value);
+
+        if (name === "" || grade < 0 || grade > 100) {
+            alert("Enter valid name and grade (0-100)");
+            return;
+        }
+
+        grades.push({ name, grade });
+        document.getElementById("name").value = "";
+        document.getElementById("grade").value = "";
+
+        renderTable();
+    }
+
+    function renderTable() {
+        const tbody = document.getElementById("tableBody");
+        tbody.innerHTML = "";
+
+        let sum = 0;
+        let high = -Infinity;
+        let low = Infinity;
+
+        grades.forEach((s, i) => {
+            sum += s.grade;
+            high = Math.max(high, s.grade);
+            low = Math.min(low, s.grade);
+
+            tbody.innerHTML += `
+                <tr>
+                    <td>${i + 1}</td>
+                    <td>${s.name}</td>
+                    <td>${s.grade}</td>
+                </tr>
+            `;
+        });
+
+        document.getElementById("avg").textContent =
+            (sum / grades.length).toFixed(2);
+        document.getElementById("high").textContent = high;
+        document.getElementById("low").textContent = low;
+    }
+</script>
+
+</body>
+</html>
